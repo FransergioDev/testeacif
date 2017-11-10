@@ -5,26 +5,18 @@
  */
 package br.com.fransergiodev.testeacif.domain;
 
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
  * @author fransergio-dev
  */
-public class Produto {
+public class Produto implements java.io.Serializable{
     private Long id;
     private GrupoProduto grupoProduto;
     private String descricao;
     private String marca;
-    private Calendar dataCadastro;
-
-    public Produto(Long id, GrupoProduto grupoProduto, String descricao, String marca, Calendar dataCadastro) {
-        this.id = id;
-        this.grupoProduto = grupoProduto;
-        this.descricao = descricao;
-        this.marca = marca;
-        this.dataCadastro = dataCadastro;
-    }
+    private Date dataCadastro;
 
     public Long getId() {
         return id;
@@ -58,11 +50,11 @@ public class Produto {
         this.marca = marca;
     }
 
-    public Calendar getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Calendar dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
     

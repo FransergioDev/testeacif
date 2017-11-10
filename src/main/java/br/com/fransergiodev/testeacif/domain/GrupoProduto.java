@@ -5,22 +5,18 @@
  */
 package br.com.fransergiodev.testeacif.domain;
 
-import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
+
 
 /**
  *
  * @author fransergio-dev
  */
-public class GrupoProduto {
+public class GrupoProduto implements java.io.Serializable{
     private Long id;
     private String descricao;
-    private Calendar dataCadastro;
-
-    public GrupoProduto(Long id, String descricao, Calendar dataCadastro) {
-        this.id = id;
-        this.descricao = descricao;
-        this.dataCadastro = dataCadastro;
-    }
+    private Date dataCadastro;
     
     public Long getId() {
         return id;
@@ -38,13 +34,44 @@ public class GrupoProduto {
         this.descricao = descricao;
     }
 
-    public Calendar getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(Calendar dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.id);
+        hash = 23 * hash + Objects.hashCode(this.descricao);
+        hash = 23 * hash + Objects.hashCode(this.dataCadastro);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GrupoProduto other = (GrupoProduto) obj;
+        if (!Objects.equals(this.descricao, other.descricao)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return Objects.equals(this.dataCadastro, other.dataCadastro);
+    }
+
     
     
 }
