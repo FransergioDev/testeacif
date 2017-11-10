@@ -14,7 +14,7 @@ O Projeto foi desenvolvido usando as tecnologias:
   - **IDE NetBeans**; 
  
 No projeto foi estruturado em MVC, para a conexão com o banco de dados foi utilizado uma conexão JDBC MySQL, utilizando o Design Pattern Factory.
-O DAO conta com uma interface genérica para implementação das classes DAO.
+As classes DAO implementam uma interface genérica dos principais métodos do CRUD.
 
  
  
