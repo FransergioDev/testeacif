@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="templates/model_system.xhtml">
+
+    <ui:define name="header">
+        <ui:include src="/includes/header.xhtml" />
+    </ui:define>
+    <ui:define name="system">
+        <h2>Produtos</h2>
+        <h:form id="frm_dados">
+            <p:panelGrid columns="4" layout="grid" id="pn_dados" class="pn">
+                <h:outputLabel for="g_id" value="ID"/>
+                <p:inputText id="g_id" value="#{produtoBean.produto.id}" 
+                             placeholder="id" readonly="true" required="false"/>
+
+                <h:outputLabel for="g_descricao" value="Descrição"/>
+                <p:inputText id="g_descricao" value="#{produtoBean.produto.descricao}"
+                             required="true" placeholder="Descrição" size="30"/>
+
+                <h:outputLabel for="g_marca" value="Marca"/>
+                <p:inputText id="g_marca" value="#{produtoBean.produto.marca}"
+                             required="true" placeholder="Marca" size="30"/>
+
+                <h:outputLabel for="g_grupo" value="Grupo"/>
+                <p:selectOneMenu id="g_grupo" filter="true"
+                                 requiredMessage="Selecione um grupo"
+                                 required="true" converter="GrupoProdutoConverter"
+                                 value="#{produtoBean.produto.grupoProduto}">
+                    <f:selectItem itemLabel="Grupo" noSelectionOption="true" />
+                    <f:selectItems value="#{produtoBean.gruposProduto}"
+                                   var="grupo" itemLabel="#{grupo.descricao}"
+                                   itemValue="#{grupo}" />
+                    <f:converter converterId="GrupoProdutoConverter"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <h:panelGrid columns="2" styleClass="pn_btns">
+                <p:commandButton  update=":msgGlobal dt_grupos pn_dados" widgetVar="btnSubmit"
+                                  onclick="PF('btnSubmit').disable();" icon="ui-icon-check"
+                                  value="Salvar" actionListener="#{produtoBean.save()}"
+                                  oncomplete="PF('btnSubmit').enable();"/>
+                <p:commandButton update=":msgGlobal pn_dados" icon="ui-icon-close"
+                                 value="Cancelar"
+                                 actionListener="#{produtoBean.cancel()}"/>
+            </h:panelGrid>
+        </h:form>
+        <br/>
+        <h:form id="dt_grupos">
+            <f:event listener="#{produtoBean.list()}" type="preRenderView"/>
+            <p:dataTable var="produto" value="#{produtoBean.produtos}" rows="5"
+                         paginator="true"
+                         emptyMessage="Nenhum produto localizado!"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Id">
+                    <h:outputText value="#{produto.id}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{produto.descricao}" />
+                </p:column>
+
+                <p:column headerText="Marca">
+                    <h:outputText value="#{produto.marca}" />
+                </p:column>
+
+                <p:column headerText="Grupo">
+                    <h:outputText value="#{produto.grupoProduto.descricao}" />
+                </p:column>
+
+                <p:column headerText="Data cadastro">
+                    <h:outputText value="#{produto.dataCadastro}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#">
+                        <p:commandButton icon="ui-icon-pencil" update="frm_dados"
+                                         actionListener="#{produtoBean.select(produto)}"/>
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgExcluir').show();"
+                                         actionListener="#{produtoBean.select(produto)}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Deseja mesmo remover?" widgetVar="dlgExcluir" appendTo="@(body)"
+                  modal="true" height="100">
+            <h:form>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="SIM" update=":msgGlobal dt_grupos frm_dados"
+                                     oncomplete="PF('dlgExcluir').hide();"
+                                     actionListener="#{produtoBean.delete()}"/>
+                    <p:commandButton value="NÃO" 
+                                     actionListener="#{produtoBean.cancel()}"
+                                     oncomplete="PF('dlgExcluir').hide();"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog> 
+    </ui:define>
+    <ui:define name="footer">
+        <ui:include src="/includes/footer.xhtml" />
+    </ui:define>
+</ui:composition>
+

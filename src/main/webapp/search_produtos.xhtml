@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="templates/model_system.xhtml">
+
+    <ui:define name="header">
+        <ui:include src="/includes/header.xhtml" />
+    </ui:define>
+    <ui:define name="system">
+        <h2>Produtos</h2>
+        <h:form id="frm_dados">
+            <p:panelGrid columns="4" layout="grid" id="pn_dados" class="pn">
+                <f:facet name="header">Produto Selecionado</f:facet>
+                <h:outputLabel for="g_id" value="ID"/>
+                <h:outputText id="g_id" value="#{produtoBean.produto.id}" />
+
+                <h:outputLabel for="g_descricao" value="Descrição"/>
+                <h:outputText id="g_descricao" value="#{produtoBean.produto.descricao}"/>
+
+                <h:outputLabel for="g_marca" value="Marca"/>
+                <h:outputText id="g_marca" value="#{produtoBean.produto.marca}"/>
+
+                <h:outputLabel for="g_grupo" value="Grupo"/>
+                <h:outputText id="g_grupo" value="#{produtoBean.produto.grupoProduto.descricao}"/>
+            </p:panelGrid>
+        </h:form>
+        <br/>
+        <h:form>
+            <h3>Pesquisa</h3>
+            <p:panelGrid columns="4" layout="grid" class="pn">
+                <p:outputLabel for="search" value="Procurar por:"/>
+                <p:inputText id="search" value="#{produtoBean.value}" size="30"/>
+
+                <p:outputLabel for="filtro" value="Filtrar por:"/>
+                <p:selectOneMenu id="filtro" value="#{produtoBean.field}" style="width:125px">
+                    <f:selectItem itemLabel="Produto" itemValue="produto" />
+                    <f:selectItem itemLabel="Grupo" itemValue="grupo" />
+                    <f:selectItem itemLabel="Marca" itemValue="marca" />
+                    <f:selectItem itemLabel="Data Cadastro" itemValue="data_cadastro" />
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <h:panelGrid columns="2">
+                <p:commandButton value="Pesquisar" 
+                                 update=":msgGlobal dt_grupos" 
+                                 actionListener="#{produtoBean.search()}"/>
+                <p:commandButton value="Limpar" update=":msgGlobal dt_grupos" actionListener="#{produtoBean.clearSearch()}" />
+            </h:panelGrid>
+            <h:outputText value="Obs.: Ao pesquisar por data, pesquisar com data e hora. Ex.:09/11/2017 22:00"/>
+        </h:form>
+        <br/>
+        <h:form id="dt_grupos">
+            <h:outputText value="Produtos localizados: #{produtoBean.quantRegistrosLocalizados}"/>
+            <p:dataTable var="produto" value="#{produtoBean.produtos}" rows="5"
+                         paginator="true"
+                         emptyMessage="Nenhum produto localizado!"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Id">
+                    <h:outputText value="#{produto.id}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{produto.descricao}" />
+                </p:column>
+
+                <p:column headerText="Marca">
+                    <h:outputText value="#{produto.marca}" />
+                </p:column>
+
+                <p:column headerText="Grupo">
+                    <h:outputText value="#{produto.grupoProduto.descricao}" />
+                </p:column>
+
+                <p:column headerText="Data cadastro">
+                    <h:outputText value="#{produto.dataCadastro}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#">
+                    <p:commandButton icon="ui-icon-search" update="frm_dados"
+                                     actionListener="#{produtoBean.select(produto)}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+    <ui:define name="footer">
+        <ui:include src="/includes/footer.xhtml" />
+    </ui:define>
+</ui:composition>
+

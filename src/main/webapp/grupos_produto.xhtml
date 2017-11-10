@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="templates/model_system.xhtml">
+
+    <ui:define name="header">
+        <ui:include src="/includes/header.xhtml" />
+    </ui:define>
+    <ui:define name="system">
+        <h2>Grupos de produtos</h2>
+        <h:form id="frm_dados">
+            <p:panelGrid columns="2" layout="grid" id="pn_dados" class="pn">
+                <h:outputLabel for="g_id" value="ID"/>
+                <p:inputText id="g_id" value="#{grupoProdutoBean.grupoProduto.id}" 
+                             placeholder="id" readonly="true" required="false"/>
+
+                <h:outputLabel for="g_descricao" value="Descrição"/>
+                <p:inputText id="g_descricao" value="#{grupoProdutoBean.grupoProduto.descricao}"
+                             required="true" placeholder="Descrição" size="30"/>
+            </p:panelGrid>
+            <h:panelGrid columns="2" styleClass="pn_btns">
+                <p:commandButton  update=":msgGlobal dt_grupos pn_dados" widgetVar="btnSubmit"
+                                  onclick="PF('btnSubmit').disable();" icon="ui-icon-check"
+                                  value="Salvar" actionListener="#{grupoProdutoBean.save()}"
+                                  oncomplete="PF('btnSubmit').enable();"/>
+                <p:commandButton update=":msgGlobal pn_dados" icon="ui-icon-close"
+                                 value="Cancelar"
+                                 actionListener="#{grupoProdutoBean.cancel()}"/>
+            </h:panelGrid>
+        </h:form>
+        <br/>
+        <h:form id="dt_grupos">
+            <f:event listener="#{grupoProdutoBean.list()}" type="preRenderView"/>
+            <p:dataTable var="grupo" value="#{grupoProdutoBean.gruposProduto}" rows="5"
+                         paginator="true" emptyMessage="Nenhum grupo de produto localizado!"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Id">
+                    <h:outputText value="#{grupo.id}" />
+                </p:column>
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{grupo.descricao}" />
+                </p:column>
+
+                <p:column headerText="Data cadastro">
+                    <h:outputText value="#{grupo.dataCadastro}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="#">
+                        <p:commandButton icon="ui-icon-pencil" update="frm_dados"
+                                         actionListener="#{grupoProdutoBean.select(grupo)}"/>
+                        <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgExcluir').show();"
+                                         actionListener="#{grupoProdutoBean.select(grupo)}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Deseja mesmo remover?" widgetVar="dlgExcluir" appendTo="@(body)"
+                  modal="true" height="100">
+            <h:form>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="SIM" update=":msgGlobal dt_grupos frm_dados"
+                                     oncomplete="PF('dlgExcluir').hide();"
+                                     actionListener="#{grupoProdutoBean.delete()}"/>
+                    <p:commandButton value="NÃO" 
+                                     actionListener="#{grupoProdutoBean.cancel()}"
+                                     oncomplete="PF('dlgExcluir').hide();"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog> 
+    </ui:define>
+    <ui:define name="footer">
+        <ui:include src="/includes/footer.xhtml" />
+    </ui:define>
+</ui:composition>
+
