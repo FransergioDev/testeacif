@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Teste ACIF</title>
+        <meta charset="UTF-8"/>
+        <h:outputStylesheet library="css" name="style_system.css" />
+    </h:head>
+    <h:body class="system">
+        <p:growl id="msgGlobal" life="5000" globalOnly="true" />
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="80" styleClass="layout header">
+               <ui:insert name="header" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" styleClass="layout" size="200"
+                          resizable="false" closable="false" collapsible="false">
+               <ui:insert name="system" />
+            </p:layoutUnit>
+            <p:layoutUnit position="south" size="40" styleClass="layout footer">
+               <ui:insert name="footer" />
+            </p:layoutUnit>
+        </p:layout>
+    </h:body>
+</html>
+
